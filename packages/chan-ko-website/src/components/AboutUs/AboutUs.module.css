@@ -23,37 +23,3 @@
   color: #333;
   margin-bottom: 1rem;
 }
-
-.highlights {
-  display: flex;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.highlight {
-  flex: 1;
-  background-color: #ffffff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.highlight h3 {
-  color: #b21f1f;
-  margin-bottom: 1rem;
-}
-
-.highlight ul {
-  padding-left: 1.5rem;
-}
-
-.highlight li {
-  margin-bottom: 0.5rem;
-  color: #333;
-}
-
-@media (max-width: 768px) {
-  .highlights {
-    flex-direction: column;
-  }
-}

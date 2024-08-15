@@ -1,11 +1,11 @@
 import React from 'react';
 import AboutUs from './components/AboutUs';
-import Services from './components/Services';
 import CaseStudies from './components/CaseStudies';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import Services from './components/Services';
 import Team from './components/Team';
 import './styles/global.css';
 

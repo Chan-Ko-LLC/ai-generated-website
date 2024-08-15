@@ -1,8 +1,17 @@
 // Hero.tsx
-import React from 'react';
+import React, {MouseEvent} from 'react';
 import styles from './Hero.module.css';
 
 const Hero: React.FC = () => {
+
+  const handleScroll = (e: MouseEvent<HTMLButtonElement>, id: string): void => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({behavior: 'smooth'});
+    }
+  };
+
   return (
     <section className={styles.hero}>
       <div className={styles.content}>
@@ -12,9 +21,7 @@ const Hero: React.FC = () => {
           <br></br>
           Empowering your Technological, Entertainment, and Edutainment Goals
         </p>
-        <a href="#services">
-        <button className={styles.cta}>Discover Our Services</button>
-        </a>
+        <button className={styles.cta} onClick={e => handleScroll(e, 'services')}>Discover Our Services</button>
       </div>
     </section>
   );
