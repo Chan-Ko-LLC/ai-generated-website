@@ -1,6 +1,7 @@
 // Services.tsx
 import React from 'react';
 import styles from './Services.module.css';
+import { handleScroll } from '../../shared/handlers';
 
 const Services: React.FC = () => {
   return (
@@ -39,9 +40,11 @@ const Services: React.FC = () => {
       </div>
       <br></br><br></br>
       <center>
-        <a href="#contact">
-        <button className={styles.link}>Contact Us</button>
-        </a>
+        <button
+          className={styles.link}
+          onClick={e => handleScroll<HTMLButtonElement>(e, 'contact', { behavior: 'smooth' })}>
+            Contact Us
+        </button>
         </center>
     </div>
   );

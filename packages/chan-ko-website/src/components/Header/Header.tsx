@@ -1,19 +1,11 @@
 // Header.tsx
-import React, {useState, MouseEvent} from 'react';
+import React, {useState} from 'react';
 import {MenuIcon, XIcon} from 'lucide-react';
 import styles from './Header.module.css';
+import {handleScroll} from '../../shared/handlers';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleScroll = (e: MouseEvent<HTMLAnchorElement>, id: string): void => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({behavior: 'smooth'});
-    }
-    setIsMenuOpen(false);
-  };
 
   return (
     <header className={styles.header}>
@@ -23,32 +15,32 @@ const Header: React.FC = () => {
       <nav className={`${styles.nav} ${isMenuOpen ? styles.open : ''}`}>
         <ul>
           <li>
-            <a href="#home" onClick={e => handleScroll(e, 'home')}>
+            <a href="#home" onClick={e => handleScroll<HTMLAnchorElement>(e, 'home', { behavior: 'smooth' }, true)}>
               Home
             </a>
           </li>
           <li>
-            <a href="#about" onClick={e => handleScroll(e, 'about')}>
+            <a href="#about" onClick={e => handleScroll<HTMLAnchorElement>(e, 'about', { behavior: 'smooth' }, true)}>
               About
             </a>
           </li>
           <li>
-            <a href="#services" onClick={e => handleScroll(e, 'services')}>
+            <a href="#services" onClick={e => handleScroll<HTMLAnchorElement>(e, 'services', { behavior: 'smooth' }, true)}>
               Services
             </a>
           </li>
           <li>
-            <a href="#case-studies" onClick={e => handleScroll(e, 'case-studies')}>
+            <a href="#case-studies" onClick={e => handleScroll<HTMLAnchorElement>(e, 'case-studies', { behavior: 'smooth' }, true)}>
               Case Studies
             </a>
           </li>
           <li>
-            <a href="#team" onClick={e => handleScroll(e, 'team')}>
+            <a href="#team" onClick={e => handleScroll<HTMLAnchorElement>(e, 'team', { behavior: 'smooth' }, true)}>
               Team
             </a>
           </li>
           <li>
-            <a href="#contact" onClick={e => handleScroll(e, 'contact')}>
+            <a href="#contact" onClick={e => handleScroll<HTMLAnchorElement>(e, 'contact', { behavior: 'smooth' }, true)}>
               Contact
             </a>
           </li>
