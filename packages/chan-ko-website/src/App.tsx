@@ -5,6 +5,7 @@ import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import Services from './components/Services';
 import Team from './components/Team';
 import './styles/global.css';
 
@@ -18,6 +19,9 @@ const App: React.FC = () => {
         </section>
         <section id="about">
           <AboutUs />
+        </section>
+        <section id="services">
+          <Services />
         </section>
         <section id="case-studies">
           <CaseStudies />

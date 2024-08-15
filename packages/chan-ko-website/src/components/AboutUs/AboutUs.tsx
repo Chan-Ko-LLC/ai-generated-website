@@ -19,35 +19,6 @@ const AboutUs: React.FC = () => {
             help clients navigate the rapidly evolving digital landscape.
           </p>
         </div>
-        <div className={styles.highlights}>
-          <div className={styles.highlight}>
-            <h3>Technology Expertise</h3>
-            <ul>
-              <li>Fractional CTO Services</li>
-              <li>Cloud Computing & Big Data</li>
-              <li>Artificial Intelligence & Machine Learning</li>
-              <li>Blockchain & Cryptocurrency</li>
-            </ul>
-          </div>
-          <div className={styles.highlight}>
-            <h3>Entertainment Focus</h3>
-            <ul>
-              <li>Digital Content Creation</li>
-              <li>Streaming Platforms</li>
-              <li>Interactive Media</li>
-              <li>Gaming & eSports</li>
-            </ul>
-          </div>
-          <div className={styles.highlight}>
-            <h3>EdTech Offerings</h3>
-            <ul>
-              <li>Technology Integration Strategy</li>
-              <li>Digital Learning Platform Evaluation</li>
-              <li>Teacher Training and Skills Development</li>
-              <li>Knowledge Retention Analysis Over Time</li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
   );
