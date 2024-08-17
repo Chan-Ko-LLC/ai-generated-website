@@ -73,19 +73,19 @@ gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command='
   sudo chown -R www-data:www-data /var/www/html
 
   echo "Updating Nginx config to force HTTPS and improve SSL settings"
-  cat << "ENDOFNGINXCONF" | sudo tee /etc/nginx/sites-available/default
+  cat << ENDOFNGINXCONF | sudo tee /etc/nginx/sites-available/default
 server {
     listen 80;
-    server_name $DOMAIN $WWW_DOMAIN;
-    return 301 https://$host$request_uri;
+    server_name '"$DOMAIN"' '"$WWW_DOMAIN"';
+    return 301 https://\$host\$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name $DOMAIN $WWW_DOMAIN;
+    server_name '"$DOMAIN"' '"$WWW_DOMAIN"';
 
-    ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/'"$DOMAIN"'/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/'"$DOMAIN"'/privkey.pem;
 
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers off;
@@ -104,7 +104,7 @@ server {
     index index.html;
 
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files \$uri \$uri/ /index.html;
     }
 }
 ENDOFNGINXCONF
