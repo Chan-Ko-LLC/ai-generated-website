@@ -63,6 +63,7 @@ EOF
     echo 'No certificate found for either domain. Creating a new one for both domains.'
     sudo certbot --nginx -d '$DOMAIN' -d '$WWW_DOMAIN' --non-interactive --agree-tos --email '$CERTBOT_EMAIL'
   fi
+"
 
 echo "Copying files..."
 gcloud compute scp --recurse --zone="$GCE_ZONE" packages/chan-ko-website/dist/* "$GCE_INSTANCE_NAME":/var/www/html/
