@@ -25,7 +25,7 @@ fi
 echo "Waiting for instance to be ready..."
 sleep 90
 
-echo "Ensure nginx is installed and running"
+echo "Ensure nginx is installed and running, and update configuration"
 gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command="
   if ! command -v nginx &> /dev/null; then
     sudo apt-get update
@@ -35,6 +35,22 @@ gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command="
   sudo systemctl start nginx
   sudo mkdir -p /var/www/html
   sudo chown -R \$(whoami):\$(whoami) /var/www/html
+
+  echo 'Updating Nginx configuration'
+  cat << EOF | sudo tee /etc/nginx/sites-available/default
+server {
+    listen 80;
+    server_name $DOMAIN $WWW_DOMAIN;
+    root /var/www/html;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+EOF
+
+  sudo nginx -t && sudo systemctl reload nginx
 
   echo 'Checking and updating SSL certificate'
   if sudo certbot certificates | grep -q '$DOMAIN' && sudo certbot certificates | grep -q '$WWW_DOMAIN'; then
@@ -47,7 +63,6 @@ gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command="
     echo 'No certificate found for either domain. Creating a new one for both domains.'
     sudo certbot --nginx -d '$DOMAIN' -d '$WWW_DOMAIN' --non-interactive --agree-tos --email '$CERTBOT_EMAIL'
   fi
-"
 
 echo "Copying files..."
 gcloud compute scp --recurse --zone="$GCE_ZONE" packages/chan-ko-website/dist/* "$GCE_INSTANCE_NAME":/var/www/html/
@@ -60,17 +75,16 @@ gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command='
   cat << "ENDOFNGINXCONF" | sudo tee /etc/nginx/sites-available/default
 server {
     listen 80;
-    server_name chan-ko.com www.chan-ko.com;
-
+    server_name $DOMAIN $WWW_DOMAIN;
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name chan-ko.com www.chan-ko.com;
+    server_name $DOMAIN $WWW_DOMAIN;
 
-    ssl_certificate /etc/letsencrypt/live/chan-ko.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/chan-ko.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
 
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers off;
