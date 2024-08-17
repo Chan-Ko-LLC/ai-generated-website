@@ -4,6 +4,7 @@
 set -e
 
 DOMAIN="$1"
+WWW_DOMAIN="www.$DOMAIN"
 CERTBOT_EMAIL="$2"
 GCE_INSTANCE_NAME="$3"
 GCE_ZONE="$4"
@@ -35,13 +36,16 @@ gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command="
   sudo mkdir -p /var/www/html
   sudo chown -R \$(whoami):\$(whoami) /var/www/html
 
-  echo 'Obtaining SSL certificate'
-  if sudo certbot certificates | grep -q '$DOMAIN'; then
-    echo 'Certificate for $DOMAIN already exists. Attempting renewal if necessary.'
+  echo 'Checking and updating SSL certificate'
+  if sudo certbot certificates | grep -q '$DOMAIN' && sudo certbot certificates | grep -q '$WWW_DOMAIN'; then
+    echo 'Certificate for both $DOMAIN and $WWW_DOMAIN exists. Attempting renewal if necessary.'
     sudo certbot renew --nginx --non-interactive
+  elif sudo certbot certificates | grep -q '$DOMAIN' || sudo certbot certificates | grep -q '$WWW_DOMAIN'; then
+    echo 'Certificate exists for one domain but not both. Updating to include both domains.'
+    sudo certbot --nginx -d '$DOMAIN' -d '$WWW_DOMAIN' --expand --non-interactive --agree-tos --email '$CERTBOT_EMAIL'
   else
-    echo 'No certificate found for $DOMAIN. Creating a new one.'
-    sudo certbot --nginx -d '$DOMAIN' --non-interactive --agree-tos --email '$CERTBOT_EMAIL'
+    echo 'No certificate found for either domain. Creating a new one for both domains.'
+    sudo certbot --nginx -d '$DOMAIN' -d '$WWW_DOMAIN' --non-interactive --agree-tos --email '$CERTBOT_EMAIL'
   fi
 "
 
@@ -56,26 +60,14 @@ gcloud compute ssh "$GCE_INSTANCE_NAME" --zone="$GCE_ZONE" --command='
   cat << "ENDOFNGINXCONF" | sudo tee /etc/nginx/sites-available/default
 server {
     listen 80;
-    server_name chan-ko.com;
+    server_name chan-ko.com www.chan-ko.com;
 
-    # Add debugging information
-    add_header X-Debug-Message "HTTP server block" always;
-    add_header X-Host $host always;
-    add_header X-Server-Name $server_name always;
-
-    return 301 https://$server_name$request_uri;
+    return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name chan-ko.com;
-
-    # Add debugging information
-    add_header X-Debug-Message "HTTPS server block" always;
-    add_header X-Host $host always;
-    add_header X-Server-Name $server_name always;
-    add_header X-URI $uri always;
-    add_header X-Request-URI $request_uri always;
+    server_name chan-ko.com www.chan-ko.com;
 
     ssl_certificate /etc/letsencrypt/live/chan-ko.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/chan-ko.com/privkey.pem;
@@ -99,9 +91,6 @@ server {
     location / {
         try_files $uri $uri/ /index.html;
     }
-
-    # Disable SSL handshake debugging for better performance
-    error_log /var/log/nginx/error.log warn;
 }
 ENDOFNGINXCONF
 
