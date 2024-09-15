@@ -15,7 +15,7 @@ const Services: React.FC = () => {
               <li>Fractional CTO Services</li>
               <li>Cloud Computing & Big Data</li>
               <li>Artificial Intelligence & Machine Learning</li>
-              <li>Blockchain & Cryptocurrency</li>
+              <li>Time Series Analysis</li>
             </ul>
           </div>
           <div className={styles.highlight}>

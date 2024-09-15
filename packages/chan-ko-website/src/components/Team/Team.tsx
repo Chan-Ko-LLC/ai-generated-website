@@ -70,9 +70,9 @@ const teamMembers: TeamMember[] = [
     bio: 'Bob excels at identifying new opportunities and partnerships.',
   },
   {
-    name: 'Bob Smith',
+    name: 'Isa Confetti',
     role: 'Motion Picture Consulting',
-    bio: 'Bob is an expert in film production and set design.',
+    bio: 'Isa is an expert in film production and set design.',
   },
   {
     name: 'Alicia Johns',

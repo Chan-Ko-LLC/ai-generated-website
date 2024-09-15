@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
         <p>
           <strong>Chan-Ko LLC</strong>
           <br></br>
-          Empowering your Technological, Entertainment, and Edutainment Goals
+          Empowering your Technological, Entertainment, and Educational Goals
         </p>
         <button
           className={styles.cta}
