@@ -33,7 +33,7 @@ const Services: React.FC = () => {
               <li>Technology Integration Strategy</li>
               <li>Digital Learning Platform Evaluation</li>
               <li>Teacher Training and Skills Development</li>
-              <li>Knowledge Retention Analysis Over Time</li>
+              <li>E-Rate Grant Technology Services</li>
             </ul>
           </div>
         </div>
