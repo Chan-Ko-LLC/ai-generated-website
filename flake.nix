@@ -82,6 +82,11 @@
           # A hook run every time you enter the environment
           shellHook = ''
             echo -e "\033[0;32m### Welcome to the $GREET! ###\033[0m"
+            git update-index --assume-unchanged scripts/prevent-main-commits.sh
+            echo "# NOTE: scripts/prevent-main-commits.sh is no longer being tracked by git."
+            echo "# NOTE: If you have not yet done so, please follow the instructions in that file for local setup."
+            echo "# NOTE: If required, you can re-enable git tracking, with:"
+            echo "# NOTE: git update-index --no-assume-unchanged scripts/prevent-main-commits.sh"
           '';
         };
       });
