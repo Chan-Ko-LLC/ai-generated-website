@@ -22,13 +22,13 @@ describe('CaseStudies', () => {
 
   it('renders all case study cards', () => {
     expect(screen.getAllByRole('img')).toHaveLength(3);
-    expect(screen.getByText('Project Alpha')).toBeDefined();
+    expect(screen.getByText('Fractional CTO Engagement')).toBeDefined();
     expect(screen.getByText('Beta Transformation')).toBeDefined();
     expect(screen.getByText('Gamma Tech Integration')).toBeDefined();
   });
 
   it('initially shows short descriptions', () => {
-    expect(screen.getByText('Innovative solution for streamlining workflow processes.')).toBeDefined();
+    expect(screen.getByText("Transforming a Computer Vision Startup's Engineering Organization")).toBeDefined();
     expect(screen.getByText('Digital transformation for a leading retail chain.')).toBeDefined();
     expect(screen.getByText('Seamless integration of cutting-edge technologies.')).toBeDefined();
   });
@@ -37,8 +37,9 @@ describe('CaseStudies', () => {
     const readMoreButtons = screen.getAllByText('Read More');
     fireEvent.click(readMoreButtons[0]);
 
-    expect(screen.getByText(/Project Alpha revolutionized the workflow/)).toBeDefined();
-    expect(screen.queryByText('Innovative solution for streamlining workflow processes.')).toBeNull();
+    expect(screen.getByText(/Fractional CTO Engagement/)).toBeDefined();
+    expect(screen.getByText(/Client Overview/)).toBeDefined();
+    expect(screen.queryByText("Transforming a Computer Vision Startup's Engineering Organization")).toBeNull();
   });
 
   it('collapses an expanded card when "Read Less" is clicked', () => {
@@ -47,8 +48,8 @@ describe('CaseStudies', () => {
     const readLessButton = screen.getByText('Read Less');
     fireEvent.click(readLessButton);
 
-    expect(screen.queryByText(/Project Alpha revolutionized the workflow/)).toBeNull();
-    expect(screen.getByText('Innovative solution for streamlining workflow processes.')).toBeDefined();
+    expect(screen.queryByText(/Client Overview/)).toBeNull();
+    expect(screen.getByText("Transforming a Computer Vision Startup's Engineering Organization")).toBeDefined();
   });
 
   it('only expands one card at a time', () => {
@@ -56,7 +57,7 @@ describe('CaseStudies', () => {
     fireEvent.click(readMoreButtons[0]);
     fireEvent.click(readMoreButtons[1]);
 
-    expect(screen.queryByText(/Project Alpha revolutionized the workflow/)).toBeNull();
+    expect(screen.queryByText(/Client Overview/)).toBeNull();
     expect(screen.getByText(/The Beta Transformation project involved/)).toBeDefined();
   });
 });

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import styles from './CaseStudies.module.css';
 
 interface CaseStudy {
@@ -12,9 +13,51 @@ interface CaseStudy {
 const caseStudies: CaseStudy[] = [
     {
       id: '1',
-      title: 'Project Alpha',
-      description: 'Innovative solution for streamlining workflow processes.',
-      extendedDescription: 'Project Alpha revolutionized the workflow for a major corporation, resulting in a 40% increase in productivity and a 25% reduction in operational costs. Our team implemented cutting-edge AI technology to automate routine tasks, freeing up employees to focus on high-value activities.',
+      title: 'Fractional CTO Engagement',
+      description: "Transforming a Computer Vision Startup's Engineering Organization",
+      extendedDescription: `
+#### Client Overview
+Our client, a promising computer vision startup, approached us seeking fractional CTO services to enhance their engineering capabilities and streamline their development processes. The company had a solid product concept but needed expert guidance to scale their engineering operations effectively.
+
+#### Challenges
+1. Lack of standardized coding practices.
+2. Understaffed engineering team.
+3. Inefficient project management.
+4. Undocumented engineering processes and practices.
+
+#### Our Approach
+We developed a comprehensive strategy to address these challenges:
+
+##### 1. Implementing Coding Standards and Best Practices
+- Introduced Google's coding standards to ensure consistency and readability across the codebase.
+- Implemented ["Accelerate"](https://itrevolution.com/product/accelerate/) recommended engineering practices, focusing on continuous delivery and lean management principles.
+
+##### 2. Strengthening the Engineering Team
+- Recruited and onboarded two senior engineers, bringing valuable expertise and leadership to the team.
+- Mentored existing team members to elevate their skills and align with new standards.
+
+##### 3. Enhancing Project Management
+- Introduced Kanban methodology to visualize workflow and optimize task management.
+- Improved Jira usage, including setting up integrations with GitHub for seamless issue tracking and code review processes.
+
+##### 4. Documenting and Organizing Engineering Practices
+- Created comprehensive documentation in Confluence, covering:
+  - Engineering practices
+  - Design documents
+  - Development processes
+- Organized information for easy access and updates, fostering knowledge sharing within the team.
+
+#### Results
+Our fractional CTO services led to significant improvements in the startup's engineering organization:
+
+1. **Increased Code Quality**: Standardized coding practices resulted in more maintainable and efficient code.
+2. **Enhanced Team Productivity**: The addition of senior engineers and improved processes led to faster development cycles and reduced bottlenecks.
+3. **Improved Project Visibility**: Kanban and optimized Jira usage provided clearer insights into project status and resource allocation.
+4. **Better Knowledge Management**: Comprehensive documentation in Confluence reduced onboarding time for new team members and improved collaboration.
+
+#### Conclusion
+Through our fractional CTO services, we successfully transformed the computer vision startup's engineering organization. By implementing industry best practices, strengthening the team, and improving processes, we set the foundation for scalable and efficient software development. This engagement showcases our ability to provide strategic technical leadership and drive tangible improvements in engineering operations.
+      `,
       imageUrl: '/images/case-study-1.jpg',
     },
     {
@@ -60,9 +103,13 @@ const CaseStudies: React.FC = () => {
                     className={styles.image}
                 />
                 <h3 className={styles.studyTitle}>{study.title}</h3>
-                <p className={styles.description}>
-                  {expandedId === study.id ? study.extendedDescription : study.description}
-                </p>
+                <div className={styles.description}>
+                  {expandedId === study.id ? (
+                    <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
+                  ) : (
+                    <p>{study.description}</p>
+                  )}
+                </div>
                 <button
                   onClick={() => toggleExpand(study.id)}
                   className={styles.link}
