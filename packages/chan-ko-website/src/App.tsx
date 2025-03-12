@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AboutUs from './components/AboutUs';
 import CaseStudies from './components/CaseStudies';
 import ContactForm from './components/ContactForm';
@@ -10,6 +10,8 @@ import Team from './components/Team';
 import './styles/global.css';
 
 const App: React.FC = () => {
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+
   return (
     <div className="App">
       <Header />
@@ -24,7 +26,10 @@ const App: React.FC = () => {
           <Services />
         </section>
         <section id="case-studies">
-          <CaseStudies />
+            <CaseStudies
+                focusedId={focusedId}
+                onFocusChange={setFocusedId}
+            />
         </section>
         <section id="team">
           <Team />
