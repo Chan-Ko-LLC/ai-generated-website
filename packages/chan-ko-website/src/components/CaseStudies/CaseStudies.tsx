@@ -154,7 +154,7 @@ Through our fractional CTO services, we successfully transformed the computer vi
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     const toggleExpand = (id: string) => {
-      setExpandedId(expandedId === id ? null : id);
+      setExpandedId(prev => prev === id ? null : id);
     };
 
     return (

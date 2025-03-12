@@ -29,6 +29,7 @@
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease;
+    outline: none;
 }
 
 .card.expanded {
@@ -37,6 +38,10 @@
 
 .card:hover .image {
   transform: scale(1.05);
+}
+
+.card:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
 
 .card:not(.expanded) {
