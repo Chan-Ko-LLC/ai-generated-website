@@ -79,7 +79,56 @@ Through our fractional CTO services, we successfully transformed the computer vi
     },
   ];
 
-const CaseStudies: React.FC = () => {
+  interface CaseStudyCardProps {
+    study: CaseStudy;
+    expanded: boolean;
+    toggleExpand: (id: string) => void;
+  }
+
+  const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, expanded, toggleExpand }) => (
+    <div className={`${styles.card} ${expanded ? styles.expanded : ''}`}>
+      <img
+        src={`https://picsum.photos/seed/${study.title}/200/200`}
+        alt={study.title}
+        className={styles.image}
+      />
+      <h3 className={styles.studyTitle}>{study.title}</h3>
+      <div className={styles.description}>
+        {expanded ? (
+          <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
+        ) : (
+          <p>{study.description}</p>
+        )}
+      </div>
+      <button
+        onClick={() => toggleExpand(study.id)}
+        className={styles.link}
+      >
+        {expanded ? 'Read Less' : 'Read More'}
+      </button>
+    </div>
+  );
+
+  interface CaseStudyGridProps {
+    studies: CaseStudy[];
+    expandedId: string | null;
+    toggleExpand: (id: string) => void;
+  }
+
+  const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({ studies, expandedId, toggleExpand }) => (
+    <div className={styles.grid}>
+      {studies.map((study) => (
+        <CaseStudyCard
+          key={study.id}
+          study={study}
+          expanded={expandedId === study.id}
+          toggleExpand={toggleExpand}
+        />
+      ))}
+    </div>
+  );
+
+  const CaseStudies: React.FC = () => {
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     const toggleExpand = (id: string) => {
@@ -90,35 +139,11 @@ const CaseStudies: React.FC = () => {
       <section className={styles.caseStudies}>
         <h2>Case Studies</h2>
         <div className={styles.content}>
-          <div className={styles.grid}>
-            {caseStudies.map((study) => (
-              <div
-                key={study.id}
-                className={`${styles.card} ${expandedId === study.id ? styles.expanded : ''}`}
-              >
-
-                <img
-                    src={`https://picsum.photos/seed/${study.title}/200/200`}
-                    alt={study.title}
-                    className={styles.image}
-                />
-                <h3 className={styles.studyTitle}>{study.title}</h3>
-                <div className={styles.description}>
-                  {expandedId === study.id ? (
-                    <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
-                  ) : (
-                    <p>{study.description}</p>
-                  )}
-                </div>
-                <button
-                  onClick={() => toggleExpand(study.id)}
-                  className={styles.link}
-                >
-                  {expandedId === study.id ? 'Read Less' : 'Read More'}
-                </button>
-              </div>
-            ))}
-          </div>
+          <CaseStudyGrid
+            studies={caseStudies}
+            expandedId={expandedId}
+            toggleExpand={toggleExpand}
+          />
         </div>
       </section>
     );
