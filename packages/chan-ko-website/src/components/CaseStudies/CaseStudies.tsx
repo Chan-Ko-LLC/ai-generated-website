@@ -2,12 +2,14 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from './CaseStudies.module.css';
 
+import client1Image from '../../assets/images/client_smyl_logo-1_300dpi.jpg';
+
 interface CaseStudy {
     id: string;
     title: string;
     description: string;
     extendedDescription: string;
-    imageUrl: string;
+    image?: string;
 }
 
 const caseStudies: CaseStudy[] = [
@@ -58,7 +60,7 @@ Our fractional CTO services led to significant improvements in the startup's eng
 #### Conclusion
 Through our fractional CTO services, we successfully transformed the computer vision startup's engineering organization. By implementing industry best practices, strengthening the team, and improving processes, we set the foundation for scalable and efficient software development. This engagement showcases our ability to provide strategic technical leadership and drive tangible improvements in engineering operations.
       `,
-      imageUrl: '/images/case-study-1.jpg',
+      image: client1Image,
     },
     {
       id: '2',
@@ -68,14 +70,12 @@ Through our fractional CTO services, we successfully transformed the computer vi
       national retail chain's digital infrastructure. We implemented a new e-commerce platform,
       modernized in-store technology, and created a seamless omnichannel experience. This resulted
       in a 50% increase in online sales and a 30% improvement in customer satisfaction scores.`,
-      imageUrl: '/images/case-study-2.jpg',
     },
     {
       id: '3',
       title: 'Gamma Tech Integration',
       description: 'Seamless integration of cutting-edge technologies.',
       extendedDescription: 'For Gamma Tech, we integrated IoT sensors, blockchain, and machine learning algorithms to create a next-generation supply chain management system. This integration improved inventory accuracy by 99.9%, reduced waste by 35%, and increased overall supply chain efficiency by 28%.',
-      imageUrl: '/images/case-study-3.jpg',
     },
   ];
 
@@ -88,7 +88,7 @@ Through our fractional CTO services, we successfully transformed the computer vi
   const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, expanded, toggleExpand }) => (
     <div className={`${styles.card} ${expanded ? styles.expanded : ''}`}>
       <img
-        src={`https://picsum.photos/seed/${study.title}/200/200`}
+        src={study.image || `https://picsum.photos/seed/${study.title}/200/200`}
         alt={study.title}
         className={styles.image}
       />
