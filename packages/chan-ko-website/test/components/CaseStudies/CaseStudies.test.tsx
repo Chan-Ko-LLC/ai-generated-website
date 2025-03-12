@@ -11,9 +11,15 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CaseStudies from '../../../src/components/CaseStudies';
 
+beforeAll(() => {
+  // Mock scrollIntoView to prevent errors in tests
+  window.HTMLElement.prototype.scrollIntoView = vi.fn();
+});
+
 describe('CaseStudies', () => {
   beforeEach(() => {
     render(<CaseStudies />);
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
   });
 
   it('renders the Case Studies title', () => {
