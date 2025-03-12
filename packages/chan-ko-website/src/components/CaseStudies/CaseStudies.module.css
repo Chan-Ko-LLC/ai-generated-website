@@ -30,6 +30,7 @@
     flex-direction: column;
     transition: all 0.3s ease;
     outline: none;
+    overflow: hidden;
 }
 
 .card.expanded {

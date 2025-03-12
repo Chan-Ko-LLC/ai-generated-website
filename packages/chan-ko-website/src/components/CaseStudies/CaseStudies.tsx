@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from './CaseStudies.module.css';
 
@@ -83,92 +83,126 @@ Through our fractional CTO services, we successfully transformed the computer vi
     study: CaseStudy;
     expanded: boolean;
     toggleExpand: (id: string) => void;
+    isFocused?: boolean;
   }
 
-  const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, expanded, toggleExpand }) => {
-    const cardRef = useRef<HTMLDivElement>(null);
+  const CaseStudyCard = React.forwardRef<HTMLDivElement, CaseStudyCardProps>(
+    ({ study, expanded, toggleExpand, isFocused }, ref) => {
 
-    // Focus management
-    useEffect(() => {
-      if (expanded && cardRef.current) {
-        cardRef.current.focus();
-        cardRef.current.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-        });
-      }
-    }, [expanded]);
+        useEffect(() => {
+            if (isFocused && ref && typeof ref !== 'function') {
+                ref.current?.scrollIntoView({ behavior: 'smooth' });
+                ref.current?.focus();
+            }
+        }, [isFocused, ref]);
 
-    return (
-      <div
-        ref={cardRef}
-        className={`${styles.card} ${expanded ? styles.expanded : ''}`}
-        tabIndex={-1} // Make div focusable
-      >
-        <div className={styles.imageContainer}>
-          <img
-            src={study.image || `https://picsum.photos/seed/${study.title}/300/200`}
-            alt={study.title}
-            className={styles.image}
-          />
-        </div>
-        <h3 className={styles.studyTitle}>{study.title}</h3>
-        <div className={styles.description}>
-          {expanded ? (
-            <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
-          ) : (
-            <p>{study.description}</p>
-          )}
-        </div>
-        <button
-          onClick={() => toggleExpand(study.id)}
-          className={styles.link}
-          aria-expanded={expanded}
-        >
-          {expanded ? 'Read Less' : 'Read More'}
-        </button>
-      </div>
-    );
-  };
-
-  interface CaseStudyGridProps {
-    studies: CaseStudy[];
-    expandedId: string | null;
-    toggleExpand: (id: string) => void;
-  }
-
-  const CaseStudyGrid: React.FC<CaseStudyGridProps> = ({ studies, expandedId, toggleExpand }) => (
-    <div className={styles.grid}>
-      {studies.map((study) => (
-        <CaseStudyCard
-          key={study.id}
-          study={study}
-          expanded={expandedId === study.id}
-          toggleExpand={toggleExpand}
-        />
-      ))}
-    </div>
+        return (
+            <div
+                ref={ref}
+                className={`${styles.card} ${expanded ? styles.expanded : ''}`}
+                tabIndex={-1}
+            >
+                <div className={styles.imageContainer}>
+                    <img
+                        src={study.image || `https://picsum.photos/seed/${study.title}/300/200`}
+                        alt={study.title}
+                        className={styles.image}
+                    />
+                </div>
+                <h3 className={styles.studyTitle}>{study.title}</h3>
+                <div className={styles.description}>
+                    {expanded ? (
+                        <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
+                    ) : (
+                        <p>{study.description}</p>
+                    )}
+                </div>
+                <button
+                    onClick={() => toggleExpand(study.id)}
+                    className={styles.link}
+                    aria-expanded={expanded}
+                >
+                    {expanded ? 'Read Less' : 'Read More'}
+                </button>
+            </div>
+        );
+    }
   );
 
-  const CaseStudies: React.FC = () => {
+  interface CaseStudiesProps {
+      focusedId?: string | null;
+      onFocusChange?: (id: string | null) => void;
+  }
+
+  const CaseStudies: React.FC<CaseStudiesProps> = ({ focusedId, onFocusChange }) => {
     const [expandedId, setExpandedId] = useState<string | null>(null);
+    const cardRefs = React.useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const prevExpandedId = usePrevious(expandedId);
+
+    // Handle both external focusedId changes and internal toggles
+    useEffect(() => {
+        if (focusedId && cardRefs.current[focusedId]) {
+            const cardElement = cardRefs.current[focusedId];
+            cardElement?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+            cardElement?.focus();
+        }
+    }, [focusedId]);
+
+    // Handle scroll position after collapse
+    useEffect(() => {
+        if (prevExpandedId && !expandedId) {
+            // Scroll to the card that was just collapsed
+            const cardElement = cardRefs.current[prevExpandedId];
+            if (cardElement) {
+                cardElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            }
+        }
+    }, [expandedId, prevExpandedId]);
 
     const toggleExpand = (id: string) => {
-      setExpandedId(prev => prev === id ? null : id);
+        setExpandedId(prev => {
+            const newExpandedId = prev === id ? null : id;
+            // Notify parent about focus change when toggling
+            onFocusChange?.(newExpandedId || id);
+            return newExpandedId;
+        });
     };
 
     return (
-      <section className={styles.caseStudies}>
-        <h2>Case Studies</h2>
-        <div className={styles.content}>
-          <CaseStudyGrid
-            studies={caseStudies}
-            expandedId={expandedId}
-            toggleExpand={toggleExpand}
-          />
-        </div>
-      </section>
+        <section className={styles.caseStudies}>
+            <h2>Case Studies</h2>
+            <div className={styles.content}>
+                <div className={styles.grid}>
+                    {caseStudies.map((study) => (
+                        <CaseStudyCard
+                            key={study.id}
+                            study={study}
+                            expanded={expandedId === study.id}
+                            toggleExpand={toggleExpand}
+                            ref={(el) => cardRefs.current[study.id] = el}
+                            isFocused={focusedId === study.id}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
     );
   };
+
+  // Add this custom hook at the bottom of the file
+  function usePrevious<T>(value: T): T | undefined {
+      const ref = useRef<T>();
+      useEffect(() => {
+          ref.current = value;
+      });
+      return ref.current;
+  }
+
 
 export default CaseStudies;
