@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from './CaseStudies.module.css';
 
@@ -85,29 +85,51 @@ Through our fractional CTO services, we successfully transformed the computer vi
     toggleExpand: (id: string) => void;
   }
 
-  const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, expanded, toggleExpand }) => (
-    <div className={`${styles.card} ${expanded ? styles.expanded : ''}`}>
-      <img
-        src={study.image || `https://picsum.photos/seed/${study.title}/200/200`}
-        alt={study.title}
-        className={styles.image}
-      />
-      <h3 className={styles.studyTitle}>{study.title}</h3>
-      <div className={styles.description}>
-        {expanded ? (
-          <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
-        ) : (
-          <p>{study.description}</p>
-        )}
-      </div>
-      <button
-        onClick={() => toggleExpand(study.id)}
-        className={styles.link}
+  const CaseStudyCard: React.FC<CaseStudyCardProps> = ({ study, expanded, toggleExpand }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    // Focus management
+    useEffect(() => {
+      if (expanded && cardRef.current) {
+        cardRef.current.focus();
+        cardRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }
+    }, [expanded]);
+
+    return (
+      <div
+        ref={cardRef}
+        className={`${styles.card} ${expanded ? styles.expanded : ''}`}
+        tabIndex={-1} // Make div focusable
       >
-        {expanded ? 'Read Less' : 'Read More'}
-      </button>
-    </div>
-  );
+        <div className={styles.imageContainer}>
+          <img
+            src={study.image || `https://picsum.photos/seed/${study.title}/300/200`}
+            alt={study.title}
+            className={styles.image}
+          />
+        </div>
+        <h3 className={styles.studyTitle}>{study.title}</h3>
+        <div className={styles.description}>
+          {expanded ? (
+            <ReactMarkdown>{study.extendedDescription}</ReactMarkdown>
+          ) : (
+            <p>{study.description}</p>
+          )}
+        </div>
+        <button
+          onClick={() => toggleExpand(study.id)}
+          className={styles.link}
+          aria-expanded={expanded}
+        >
+          {expanded ? 'Read Less' : 'Read More'}
+        </button>
+      </div>
+    );
+  };
 
   interface CaseStudyGridProps {
     studies: CaseStudy[];
