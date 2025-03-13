@@ -158,7 +158,6 @@ Through our fractional CTO services, we successfully transformed the computer vi
             const cardElement = cardRefs.current[prevExpandedId];
             if (cardElement) {
                 cardElement.scrollIntoView({
-                    behavior: 'smooth',
                     block: 'nearest'
                 });
             }
