@@ -1,68 +1,107 @@
+/* packages/chan-ko-website/src/components/Hero/Hero.module.css */
+
+.loading {
+  /* Optional: Style the hero section while particles are loading */
+  /* You might just want the fallback background color to show */
+   background-color: #1a2a6c; /* Ensure fallback is visible */
+}
+
+/* Ensure other styles are still correct */
 .hero {
-    background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-  }
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
 
-  @keyframes gradientBG {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
+  /* ---- ADD THESE LINES BACK ---- */
+  background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
 
-  .content {
-    max-width: 800px;
-    padding: 0 20px;
+/* ---- ADD THIS WHOLE KEYFRAMES RULE BACK ---- */
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.content p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cta {
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  background-color: #ffffff;
+  color: #1a2a6c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  /* Add a subtle lift on hover */
+  will-change: transform; /* Optimize hover animation */
+}
+
+.cta:hover {
+  background-color: #e0e0e0; /* Slightly less stark than original hover */
+  color: #b21f1f; /* Use one of your theme colors */
+  transform: translateY(-2px); /* Lift effect */
+}
+
+.cta:active {
+    transform: translateY(0px); /* Press down effect */
+}
+
+
+/* Keep responsive adjustments */
+@media (max-width: 768px) {
   .content h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 2rem;
   }
 
   .content p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.2rem;
   }
 
   .cta {
-    padding: 12px 24px;
-    font-size: 1.2rem;
-    background-color: #ffffff;
-    color: #1a2a6c;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 1rem;
+    padding: 10px 20px;
   }
 
-  .cta:hover {
-    background-color: #1a2a6c;
-    color: #ffffff;
-  }
-
-  @media (max-width: 768px) {
-    .content h1 {
-      font-size: 2rem;
-    }
-
-    .content p {
-      font-size: 1.2rem;
-    }
-
-    .cta {
-      font-size: 1rem;
-    }
-  }
+  /* Adjust particle interaction distance on smaller screens if needed */
+  /* You'd need to update the options object dynamically for this, */
+  /* which is more complex (e.g., using window resize listeners) */
+}
