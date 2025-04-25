@@ -5,6 +5,7 @@ import styles from './Team.module.css';
 import chandraImage from '../../assets/images/chandra-erdman.png';
 import kourtniImage from '../../assets/images/kourtni-in-chicago-hoodie.jpg';
 import cliffImage from '../../assets/images/cray_podium_20230926.jpg';
+import jasonImage from '../../assets/images/jason_williamson_1.jpg';
 
 interface TeamMember {
   name: string;
@@ -53,6 +54,7 @@ const teamMembers: TeamMember[] = [
     bio: `Jason brings 15+ years of experience in sales and business development across
     pharmaceuticals, real estate, and technology. He has a proven track record of driving revenue
     growth and building strong client relationships.`,
+    image: jasonImage,
   },
   {
     name: 'John Smith',
